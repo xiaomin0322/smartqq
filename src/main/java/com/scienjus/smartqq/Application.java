@@ -18,7 +18,8 @@ public class Application {
         SmartQQClient client = new SmartQQClient(new MessageCallback() {
             @Override
             public void onMessage(Message message) {
-                System.out.println(message.getContent());
+                //System.out.println(message.getContent());
+            	System.out.println(message);
             }
 
             @Override
@@ -40,10 +41,10 @@ public class Application {
             }
         }
         //使用后调用close方法关闭，你也可以使用try-with-resource创建该对象并自动关闭
-        try {
+        /*try {
             client.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }

@@ -14,7 +14,13 @@ import lombok.Data;
 @Data
 public class GroupMessage {
 
-    private long groupId;
+    @Override
+	public String toString() {
+		return "GroupMessage [groupId=" + groupId + ", time=" + time + ", content=" + content + ", userId=" + userId
+				+ ", font=" + font + "]";
+	}
+
+	private long groupId;
 
     private long time;
 
