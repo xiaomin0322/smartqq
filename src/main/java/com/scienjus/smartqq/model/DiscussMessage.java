@@ -12,7 +12,47 @@ import lombok.Data;
 @Data
 public class DiscussMessage {
 
-    private long discussId;
+    public long getDiscussId() {
+		return discussId;
+	}
+
+	public void setDiscussId(long discussId) {
+		this.discussId = discussId;
+	}
+
+	public long getTime() {
+		return time;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
+	public Font getFont() {
+		return font;
+	}
+
+	public void setFont(Font font) {
+		this.font = font;
+	}
+
+	private long discussId;
 
     private long time;
 
