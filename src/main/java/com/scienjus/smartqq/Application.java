@@ -3,6 +3,7 @@ package com.scienjus.smartqq;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.scienjus.smartqq.callback.MessageCallback;
 import com.scienjus.smartqq.client.SmartQQClient;
@@ -45,6 +46,9 @@ public class Application {
 
 			for (String url : urls) {
 				String newURl = AlibabUrl.getClickURL(url);
+				if(StringUtils.isBlank(newURl)){
+					return null;
+				}
 				newContent = newContent.replace(url, newURl);
 				System.out.println("oldURL :" + url + " newURL : " + newURl);
 			}
@@ -74,7 +78,7 @@ public class Application {
 
 			@Override
 			public void onGroupMessage(GroupMessage message) {
-				System.out.println(message);
+				System.out.println("message:"+message);
 
 				try {
 					List<Long> qqList = QQMonitor.monitorGroupMap.get(String.valueOf(message.getGroupId()));
@@ -83,14 +87,13 @@ public class Application {
 
 					if (CollectionUtils.isNotEmpty(qqList)) {
 						String content = getNewContent(message.getContent());
-
-						for (Long qqGroupId : qqList) {
-
-							client.sendMessageToGroup(qqGroupId, content,3);
-							Thread.sleep(1000);
+						if(StringUtils.isNotBlank(content)){
+							for (Long qqGroupId : qqList) {
+								client.sendMessageToGroup(qqGroupId, content,3);
+								Thread.sleep(1000);
+							}
 						}
 					}
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
