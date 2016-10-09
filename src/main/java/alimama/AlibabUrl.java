@@ -56,6 +56,8 @@ public class AlibabUrl {
 	 */
 	public static synchronized String getClickURL(String url) throws Exception {
 
+		try{
+			
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;
 
 		if (url.contains("s.click.taobao.com")) {
@@ -91,7 +93,10 @@ public class AlibabUrl {
 		System.out.println("生成短链接：" + duanLink);
 
 		return duanLink;
-
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 	public static WebDriver webDriver = null;
