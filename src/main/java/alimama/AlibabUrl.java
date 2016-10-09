@@ -54,7 +54,7 @@ public class AlibabUrl {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String getClickURL(String url) throws Exception {
+	public static synchronized String getClickURL(String url) throws Exception {
 
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;
 
