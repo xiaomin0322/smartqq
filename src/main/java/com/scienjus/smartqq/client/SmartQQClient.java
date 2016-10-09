@@ -226,6 +226,35 @@ public class SmartQQClient implements Closeable {
         Response<String> response = post(ApiURL.SEND_MESSAGE_TO_GROUP, r);
         checkSendMsgResult(response);
     }
+    
+    /**
+     * 发送群消息
+     * @param groupId   群id
+     * @param msg       消息内容
+     */
+    public void sendMessageToGroup(long groupId, String msg,int retis) {
+        LOGGER.debug("开始发送群消息");
+
+        JSONObject r = new JSONObject();
+        r.put("group_uin", groupId);
+        r.put("content", JSON.toJSONString(Arrays.asList(msg, Arrays.asList("font", Font.DEFAULT_FONT))));  //注意这里虽然格式是Json，但是实际是String
+        r.put("face", 573);
+        r.put("clientid", Client_ID);
+        r.put("msg_id", MESSAGE_ID++);
+        r.put("psessionid", psessionid);
+
+        Response<String> response = post(ApiURL.SEND_MESSAGE_TO_GROUP, r);
+        int status = checkSendMsgResult(response);
+        if(status==1202 && retis >=0){
+        	try {
+        		System.out.println("重試次數>>>>>>>>>>"+retis);
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+        	sendMessageToGroup(groupId, msg,retis-1);
+        }
+    }
 
     /**
      * 发送讨论组消息
@@ -513,17 +542,19 @@ public class SmartQQClient implements Closeable {
     }
 
     //检查消息是否发送成功
-    private static void checkSendMsgResult(Response<String> response) {
+    private static int checkSendMsgResult(Response<String> response) {
         if (response.getStatusCode() != 200) {
             LOGGER.error(String.format("发送失败，Http返回码[%d]", response.getStatusCode()));
         }
         JSONObject json = JSON.parseObject(response.getBody());
         Integer errCode = json.getInteger("errCode");
         if (errCode != null && errCode == 0) {
-            LOGGER.debug("发送成功!");
+        	System.out.println("发送成功!");
         } else {
             LOGGER.error(String.format("发送失败，Api返回码[%d]", json.getInteger("retcode")));
+            return json.getInteger("retcode");
         }
+        return 0;
     }
 
     //检验Json返回结果

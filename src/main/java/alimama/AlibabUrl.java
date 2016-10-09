@@ -114,6 +114,7 @@ public class AlibabUrl {
 	 */
 	public static boolean login2() throws Exception {
 		try {
+			init();
 			webDriver
 					.get("https://login.taobao.com/member/login.jhtml?style=minisimple&from=alimama&qq-pf-to=pcqq.c2c");
 			Thread.sleep(5000);

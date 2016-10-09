@@ -12,6 +12,9 @@ import com.scienjus.smartqq.model.Friend;
 import com.scienjus.smartqq.model.GroupMessage;
 import com.scienjus.smartqq.model.Message;
 
+import alimama.AlibabUrl;
+import alimama.MatcherUtil;
+
 /**
  * @author ScienJus
  * @date 2015/12/18.
@@ -32,7 +35,35 @@ public class Application {
 
 	static SmartQQClient client;
 
+	public static String getNewContent(String content) {
+		String newContent = content;
+		try {
+			// 原始的url
+			List<String> urls = MatcherUtil.getUrl(content);
+
+			System.out.println("提取url:" + urls);
+
+			for (String url : urls) {
+				String newURl = AlibabUrl.getClickURL(url);
+				newContent = newContent.replace(url, newURl);
+				System.out.println("oldURL :" + url + " newURL : " + newURl);
+			}
+			
+			System.out.println("newContent : "+newContent);
+			return newContent;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+
+	}
+
 	public static void main(String[] args) throws Exception {
+
+		AlibabUrl.login2();
+
 		// 创建一个新对象时需要扫描二维码登录，并且传一个处理接收到消息的回调，如果你不需要接收消息，可以传null
 		client = new SmartQQClient(new MessageCallback() {
 			@Override
@@ -43,18 +74,27 @@ public class Application {
 
 			@Override
 			public void onGroupMessage(GroupMessage message) {
-				System.out.println(message.getContent());
 				System.out.println(message);
 
-				List<Long> qqList = QQMonitor.monitorGroupMap.get(message.getGroupId());
+				try {
+					List<Long> qqList = QQMonitor.monitorGroupMap.get(String.valueOf(message.getGroupId()));
 
-				System.out.println("qqlist >>>>>>>>>>>>" + qqList);
+					System.out.println("qqGroupId:" + message.getGroupId() + "  qqlist >>>>>>>>>>>>" + qqList);
 
-				if (CollectionUtils.isNotEmpty(qqList)) {
-					for (Long qqGroupId : qqList) {
-						client.sendMessageToGroup(qqGroupId, message.getContent());
+					if (CollectionUtils.isNotEmpty(qqList)) {
+						String content = getNewContent(message.getContent());
+
+						for (Long qqGroupId : qqList) {
+
+							client.sendMessageToGroup(qqGroupId, content,3);
+							Thread.sleep(1000);
+						}
 					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
+
 			}
 
 			@Override

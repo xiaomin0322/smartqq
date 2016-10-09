@@ -16,6 +16,15 @@ public class QQMonitor {
 	//key=监听的qq群,value=发送的qq群
 	public static Map<String,List<Long>>  monitorGroupMap = new HashMap<>();
 	
+	
+	static{
+		try {
+			init();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void init()throws Exception{
 		Properties propertiesUtil = PropertiesUtil.getProperty(QQMonitor.class.getClassLoader().getResourceAsStream("qq.properties"));
 		System.out.println(propertiesUtil);
