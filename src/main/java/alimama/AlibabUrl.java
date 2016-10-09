@@ -85,7 +85,7 @@ public class AlibabUrl {
 		// data-spm-click="gostr=/tblm.88.1;locaid=d4314d048"
 		// bx-path="components/clipboard/" id="brix_brick_2426"
 		// bx-behavior="true">http://s.click.taobao.com/7PcDpRx</textarea>
-		Thread.sleep(2000);
+		Thread.sleep(4000);
 
 		String duanLink = (String) js
 				.executeScript("return document.querySelectorAll(\"*[class='textarea']\")[2].value;");
