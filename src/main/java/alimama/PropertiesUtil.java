@@ -42,6 +42,19 @@ public class PropertiesUtil {
 		propertiesMap.putAll((Hashtable) systemConfig);
 		System.out.println("propertiesMap :"+propertiesMap);
 	}
+	
+	public PropertiesUtil(File file) {
+		Properties systemConfig=null;
+		try {
+			systemConfig = PropertiesUtil.getProperty(FileUtils.openInputStream(
+					file));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		propertiesMap.putAll((Hashtable) systemConfig);
+		System.out.println("propertiesMap :"+propertiesMap);
+	}
 
 	public static String getPropertiesMap(String key) {
 		return propertiesMap.get(key);

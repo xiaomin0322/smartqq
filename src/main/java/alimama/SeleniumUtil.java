@@ -57,7 +57,7 @@ public class SeleniumUtil {
 	 * 鍒濆鍖栨祻瑙堝櫒鐨刾rofile鏂囦欢
 	 */
 	static {
-		setDesiredCapabilities();
+	//setDesiredCapabilities();
 	}
 
 	/**
