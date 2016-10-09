@@ -89,6 +89,7 @@ public class Application {
 						String content = getNewContent(message.getContent());
 						if(StringUtils.isNotBlank(content)){
 							for (Long qqGroupId : qqList) {
+								content += "\r\n___________________________________________________________________________________________________________________";
 								client.sendMessageToGroup(qqGroupId, content,3);
 								Thread.sleep(1000);
 							}
