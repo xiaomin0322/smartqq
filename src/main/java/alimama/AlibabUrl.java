@@ -60,6 +60,7 @@ public class AlibabUrl {
 		if(StringUtils.isBlank(url)){
 			webDriver.navigate().refresh();
 			Thread.sleep(1000);
+			return null;
 		}
 		
 		try{
