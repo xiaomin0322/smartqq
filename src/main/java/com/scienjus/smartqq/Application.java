@@ -1,5 +1,6 @@
 package com.scienjus.smartqq;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -10,6 +11,7 @@ import com.scienjus.smartqq.client.SmartQQClient;
 import com.scienjus.smartqq.model.Category;
 import com.scienjus.smartqq.model.DiscussMessage;
 import com.scienjus.smartqq.model.Friend;
+import com.scienjus.smartqq.model.Group;
 import com.scienjus.smartqq.model.GroupMessage;
 import com.scienjus.smartqq.model.Message;
 
@@ -64,6 +66,37 @@ public class Application {
 		return null;
 
 	}
+	
+	static List<Group> groups = new ArrayList<>();
+	
+	
+	/**
+	 * 根据code获取群名
+	 * @param groupCode
+	 * @return
+	 */
+	public static String getGroupNameByGroupCode(long groupCode){
+		for(Group g:groups){
+			if(groupCode == g.getId() ){
+				return g.getName();
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * 根据code获取群名
+	 * @param groupCode
+	 * @return
+	 */
+	public static Long getGroupCodeByGroupName(String name){
+		for(Group g:groups){
+			if(name.equalsIgnoreCase(g.getName())){
+				return g.getId();
+			}
+		}
+		return null;
+	}
 
 	public static void main(String[] args) throws Exception {
 
@@ -84,17 +117,22 @@ public class Application {
 				System.out.println("message:"+message);
 
 				try {
-					List<Long> qqList = QQMonitor.monitorGroupMap.get(String.valueOf(message.getGroupId()));
+					String srcGroupName = getGroupNameByGroupCode(message.getGroupId());
+					
+					List<String> qqList = QQMonitor.monitorGroupMap.get(srcGroupName);
 
-					System.out.println("qqGroupId:" + message.getGroupId() + "  qqlist >>>>>>>>>>>>" + qqList);
+					System.out.println("srcGroupName:" + srcGroupName + "  destGroupNamelist >>>>>>>>>>>>" + qqList);
 
 					if (CollectionUtils.isNotEmpty(qqList)) {
 						String content = getNewContent(message.getContent());
 						if(StringUtils.isNotBlank(content)){
-							for (Long qqGroupId : qqList) {
+							for (String qqGroupName : qqList) {
+								Long destGroupId = getGroupCodeByGroupName(qqGroupName);
 								content += "\r\n___________________________________________________________________________________________________________________";
-								client.sendMessageToGroup(qqGroupId, content,3);
-								Thread.sleep(1000);
+								if(destGroupId!=null){
+									client.sendMessageToGroup(destGroupId, content,3);
+									Thread.sleep(1000);	
+								}
 							}
 						}
 					}
@@ -109,14 +147,25 @@ public class Application {
 				System.out.println(message.getContent());
 			}
 		});
+	
+		
+		groups = client.getGroupList();
+		
+		for(Group g:groups){
+			System.out.println(g);
+		}
+		
 		// 登录成功后便可以编写你自己的业务逻辑了
-		List<Category> categories = client.getFriendListWithCategory();
+	/*	List<Category> categories = client.getFriendListWithCategory();
 		for (Category category : categories) {
 			System.out.println(category.getName());
 			for (Friend friend : category.getFriends()) {
 				System.out.println("————" + friend.getNickname());
 			}
 		}
+	*/	
+		
+		
 
 		// client.sendMessageToGroup(groupId, msg);
 
