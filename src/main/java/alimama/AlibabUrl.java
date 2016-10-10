@@ -74,7 +74,7 @@ public class AlibabUrl {
 		webDriver.get(
 				"http://pub.alimama.com/myunion.htm?spm=a219t.7900221/1.1998910419.dbb742793.6paAcU#!/promo/self/links");
 
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 
 		WebElement element = webDriver.findElement(By.id("J_originUrl"));
 		element.click();
