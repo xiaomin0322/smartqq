@@ -1,6 +1,7 @@
 package alimama;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -56,6 +57,11 @@ public class AlibabUrl {
 	 */
 	public static synchronized String getClickURL(String url) throws Exception {
 
+		if(StringUtils.isBlank(url)){
+			webDriver.navigate().refresh();
+			Thread.sleep(1000);
+		}
+		
 		try{
 			
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;

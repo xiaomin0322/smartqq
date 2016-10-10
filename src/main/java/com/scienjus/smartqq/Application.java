@@ -15,6 +15,7 @@ import com.scienjus.smartqq.model.Message;
 
 import alimama.AlibabUrl;
 import alimama.MatcherUtil;
+import alimama.Timer;
 
 /**
  * @author ScienJus
@@ -67,6 +68,8 @@ public class Application {
 	public static void main(String[] args) throws Exception {
 
 		AlibabUrl.login2();
+		
+		Timer.timer();
 
 		// 创建一个新对象时需要扫描二维码登录，并且传一个处理接收到消息的回调，如果你不需要接收消息，可以传null
 		client = new SmartQQClient(new MessageCallback() {
